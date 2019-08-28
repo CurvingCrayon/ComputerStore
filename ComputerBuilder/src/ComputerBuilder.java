@@ -74,7 +74,7 @@ public class ComputerBuilder {
 				break;
 				
 			case 's':
-				System.out.println(this.catalogue.listItems());
+				System.out.println(this.catalogue.toString());
 				break;
 				
 			case 'f':
@@ -87,7 +87,15 @@ public class ComputerBuilder {
 					System.out.print("Enter maximum price: ");
 					maxPrice = In.nextDouble();
 				}
-				System.out.println(this.catalogue.listItems(targetType, minPrice, maxPrice));
+				if(minPrice > maxPrice) {
+					System.out.println("Minimum price shouldn't be greater than maximum price.");
+				}
+				else {
+					String catList = this.catalogue.listItems(targetType, minPrice, maxPrice);
+					if(catList != "") {
+						System.out.println(catList);
+					}
+				}
 				break;
 				
 			case '?':
@@ -120,19 +128,16 @@ public class ComputerBuilder {
 				String numsInput = In.nextLine();
 				ArrayList<Integer> catNums = new ArrayList<Integer>();
 				int size = this.processList(numsInput, catNums);
-				if(size == 1) {
-					
+				for(int partNum = 0; partNum < size; partNum++) {
+					int catNum = catNums.get(partNum);
+					if(this.catalogue.partExists(catNum - 1)) {
+						this.currentBuild.addPart(this.catalogue.getPart(catNum - 1));
+					}
+					else {
+						System.out.println("There is no part by that number.");
+					}
 				}
-				else if(size > 1) {
-					
-				}
-				/*if(this.catalogue.partExists(catNum - 1)) {
-					this.currentBuild.addPart(this.catalogue.getPart(catNum - 1));
-				}
-				else {
-					System.out.println("There is no part with that number.");
-				}*/
-					break;
+				break;
 				
 			case 'r': //Remove part from build
 				System.out.print("Enter number of part to remove: ");
@@ -140,12 +145,15 @@ public class ComputerBuilder {
 				if(this.currentBuild.partExists(partNum - 1)) {
 					this.currentBuild.removePart(partNum - 1);
 				}
+				else {
+					System.out.println("The build has no part with that number.");
+				}
 				break;
 				
 			case 'v': //View build parts
-				String newOut = this.currentBuild.listItems();
+				String newOut = this.currentBuild.toString();
 				if(newOut != "") {
-					System.out.println(this.currentBuild.listItems());
+					System.out.println(newOut);
 				}
 				System.out.println("Total Price: " + this.currentBuild.printCost());
 				break;
@@ -191,16 +199,17 @@ public class ComputerBuilder {
 		for(int ind = 0; ind < input.length(); ind++) {
 			if(Character.isDigit(input.charAt(ind))) {
 				String currentNum = Character.toString(input.charAt(ind));
-				for(int numInd = ind + 1; numInd < input.length(); numInd++) {
-					if(Character.isDigit(input.charAt(ind))) {
+				int numInd;
+				for(numInd = ind + 1; numInd < input.length(); numInd++) {
+					if(Character.isDigit(input.charAt(numInd))) {
 						currentNum += Character.toString(input.charAt(numInd));
 					}
 					else {
-						nums.add(Integer.parseInt(currentNum));
-						ind = numInd;
 						break;
 					}
 				}
+				ind = numInd;
+				nums.add(Integer.parseInt(currentNum));
 			}
 		}
 		return nums.size();

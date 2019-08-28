@@ -21,4 +21,8 @@ public class Part {
 	public String getType() {
 		return this.type;
 	}
+	@Override
+	public String toString() {
+		return this.type.toUpperCase() + ": " + this.name + " @ " + this.printPrice();
+	}
 }

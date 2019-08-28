@@ -1,6 +1,6 @@
 import  java.util.*;
 public class Catalogue {
-	private ArrayList<Part> parts;
+	private List<Part> parts;
 	public Catalogue() {
 		this.parts = new ArrayList<Part>();
 		this.addPart(new Part("evo 860","storage", 155.00));
@@ -15,25 +15,7 @@ public class Catalogue {
 	public void addPart(Part newPart) {
 		this.parts.add(newPart);
 	}
-	public String listItems() {
-		String out = "";
-		boolean firstLine = true;
-		for(int index = 0; index < this.parts.size(); index++) {
-			Part prt = parts.get(index);
-			if(!firstLine) {
-				out += "\n";
-			}
-			else {
-				firstLine = false;
-			}
-			out += Integer.toString(index+1) +". " + 
-					prt.getType().toUpperCase() + ": " +
-					prt.getName() + " @ " +
-					prt.printPrice();
-					
-		}
-		return out;
-	}
+	
 	public String listItems(String type, double minPrice, double maxPrice) {
 		String out = "";
 		boolean firstLine = true;
@@ -67,5 +49,22 @@ public class Catalogue {
 	}
 	public boolean partExists(int index) {
 		return (index < this.parts.size() && index >= 0);
+	}
+	@Override
+	public String toString() {
+		String out = "";
+		boolean firstLine = true;
+		for(int index = 0; index < this.parts.size(); index++) {
+			Part prt = parts.get(index);
+			if(!firstLine) {
+				out += "\n";
+			}
+			else {
+				firstLine = false;
+			}
+			out += Integer.toString(index+1)+". "+prt.toString();
+					
+		}
+		return out;
 	}
 }
